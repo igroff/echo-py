@@ -29,8 +29,6 @@ class EchoHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         # pick out our app specific config from the environment
         environment_config = {}
         for n in os.environ:
-          if not n.startswith("APP_CONFIG_"):
-            continue
           environment_config[n] = os.environ[n]
         resp_data["environment_config"] = environment_config
         response_body = json.dumps(resp_data)
