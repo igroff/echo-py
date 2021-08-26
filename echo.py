@@ -28,13 +28,6 @@ class EchoHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             request_length = int(resp_data['requestHeaders'].get('content-length', 0))
             if request_length:
                 resp_data['body'] = self.rfile.read(request_length)
-            # pick out our app specific config from the environment
-            environment_config = {}
-            for n in os.environ:
-                if not n.startswith("APP_CONFIG_"):
-                    continue
-            environment_config[n] = os.environ[n]
-            resp_data["environment_config"] = environment_config
             responseBuffer.append(resp_data)
             # if we have more entries than our 'limit' just remove the oldest
             if len(responseBuffer) > responseBufferLength:
