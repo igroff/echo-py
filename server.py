@@ -2,13 +2,18 @@
 from email.message import Message
 import BaseHTTPServer
 import logging
+import signal
 import json
+import sys
 import os
 
 BaseHTTPServer.MessageClass = Message
 
 responseBuffer = []
 responseBufferLength = os.environ.get('RESPONSE_BUFFER_LENGTH', 10)
+keepRunning = True
+
+
 
 class EchoHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     # a method for handling our any requests given, simply echo's back
@@ -52,7 +57,9 @@ class EchoHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         # Do not log resource access
         return
-    
 
 server = BaseHTTPServer.HTTPServer(('', int(os.environ.get('PORT', 8080))), EchoHandler)
-server.serve_forever()
+try:
+    server.serve_forever()
+except KeyboardInterrupt, e:
+    print("Shutdown...")
